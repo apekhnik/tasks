@@ -5,8 +5,10 @@ import { Icon } from '@/components/ui/Icon'
 import { Button } from '@/components/ui/Button'
 import { Progress } from '@/components/ui/Progress'
 import { TaskModal } from '@/components/tasks/TaskModal'
+import { CategoryModal } from '@/components/tasks/CategoryModal'
 import { useToast } from '@/hooks/useToast'
 import { createTask } from '@/lib/actions/tasks'
+import { createCategory } from '@/lib/actions/categories'
 import type { TaskWithCategory } from '@/lib/types'
 import type { Category } from '@/lib/db/schema'
 import { DIFFICULTY_LABEL, DURATIONS } from '@/lib/constants'
@@ -23,6 +25,7 @@ export function CategoriesClient({ initialTasks, categories }: CategoriesClientP
   const [tasks] = useState(initialTasks)
   const [selected, setSelected] = useState<number | null>(null)
   const [addingTask, setAddingTask] = useState(false)
+  const [addingCategory, setAddingCategory] = useState(false)
 
   const selectedCat = categories.find(c => c.id === selected)
 
@@ -34,7 +37,7 @@ export function CategoriesClient({ initialTasks, categories }: CategoriesClientP
           <span className="sub t-mono">{categories.length}</span>
         </div>
         <div className="spacer" />
-        <Button variant="primary" size="sm" icon="plus" onClick={() => toast('info', 'Создание категорий — скоро')}>
+        <Button variant="primary" size="sm" icon="plus" onClick={() => setAddingCategory(true)}>
           Новая категория
         </Button>
       </header>
@@ -92,7 +95,7 @@ export function CategoriesClient({ initialTasks, categories }: CategoriesClientP
             )
           })}
 
-          <div className="cat-card add" onClick={() => toast('info', 'Создание категорий — скоро')}>
+          <div className="cat-card add" onClick={() => setAddingCategory(true)}>
             <Icon name="plus" size={24} />
             <div className="t-body-sm">Создать категорию</div>
             <div className="t-caption text-3">иконка · цвет · название</div>
@@ -169,6 +172,17 @@ export function CategoriesClient({ initialTasks, categories }: CategoriesClientP
             await createTask({ ...data, categoryId: selectedCat?.id ?? data.categoryId })
             toast('success', 'Задача добавлена')
             setAddingTask(false)
+          }}
+        />
+      )}
+      {addingCategory && (
+        <CategoryModal
+          onClose={() => setAddingCategory(false)}
+          onSave={async data => {
+            await createCategory(data)
+            toast('success', `Категория «${data.name}» создана`)
+            setAddingCategory(false)
+            router.refresh()
           }}
         />
       )}
