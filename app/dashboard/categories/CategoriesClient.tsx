@@ -100,6 +100,10 @@ export function CategoriesClient({ initialTasks, categories }: CategoriesClientP
         </div>
       </main>
 
+      {selected !== null && (
+        <div className="mobile-overlay" onClick={() => setSelected(null)} />
+      )}
+
       {selected !== null && selectedCat && (() => {
         const list = tasks.filter(t => t.categoryId === selectedCat.id)
         const active = list.filter(t => !t.completed)

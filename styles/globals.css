@@ -280,6 +280,7 @@ input:focus, textarea:focus, button:focus { outline: none; }
 /* ----- Main ----- */
 .main {
   min-width: 0;
+  overflow-x: hidden;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: var(--topbar-h) 1fr;
@@ -1441,4 +1442,479 @@ input:focus, textarea:focus, button:focus { outline: none; }
 @keyframes spin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   TASKS TOOLBAR
+   ============================================================ */
+.tasks-toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.tasks-search-wrap { min-width: 280px; max-width: 340px; flex-shrink: 0; }
+.tasks-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.tasks-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   TASK FORM GRID (desktop: 3 cols)
+   ============================================================ */
+.task-form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.category-picker-grid { max-height: 240px; overflow: auto; padding-right: 2px; }
+
+/* ============================================================
+   ROULETTE FILTER BUTTON (desktop: hidden, mobile: shown)
+   ============================================================ */
+.roulette-filter-btn { display: none; }
+
+/* ============================================================
+   MOBILE TAB PILLS
+   ============================================================ */
+.mobile-tabs { display: none; }
+
+.mobile-tab {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-3);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 120ms;
+  white-space: nowrap;
+}
+.mobile-tab.active {
+  border-color: var(--accent-soft);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+.mobile-tab span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  opacity: 0.65;
+}
+
+/* ============================================================
+   MOBILE FAB
+   ============================================================ */
+.mobile-fab { display: none; }
+
+/* ============================================================
+   TASK MOBILE META (priority + diff shown inside row on mobile)
+   ============================================================ */
+.task-mobile-meta { display: none; }
+
+/* ============================================================
+   MOBILE DAY BARS (horizontal variant, shown on mobile)
+   ============================================================ */
+.mobile-day-chart { display: none; }
+.desktop-day-chart { display: block; }
+
+.day-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+.day-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.day-bar-row .day-lbl {
+  width: 22px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+  flex-shrink: 0;
+  text-align: right;
+}
+.day-bar-row.is-today .day-lbl { color: var(--accent); }
+.day-track {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-4);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.day-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--accent-dim);
+  min-width: 0;
+  transition: width 600ms cubic-bezier(.2,.7,.2,1);
+}
+.day-bar-row.is-today .day-fill { background: var(--accent); }
+.day-bar-row .day-cnt {
+  width: 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+  flex-shrink: 0;
+  text-align: right;
+}
+.day-bar-row.is-today .day-cnt { color: var(--accent); font-weight: 600; }
+
+/* ============================================================
+   BOTTOM NAV (mobile)
+   ============================================================ */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: var(--bg-2);
+  border-top: 1px solid var(--border);
+  z-index: 40;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text-3);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color 120ms;
+  padding: 0;
+}
+.bottom-nav-item.active { color: var(--accent); }
+.bottom-nav-item.active svg { stroke: var(--accent); }
+
+/* backdrop shown when right-panel is open on mobile */
+.mobile-overlay {
+  display: none;
+}
+
+/* ============================================================
+   MOBILE RESPONSIVE  ≤ 768px
+   ============================================================ */
+@media (max-width: 768px) {
+  /* --- App shell --- */
+  .app {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    display: none;
+  }
+  .bottom-nav {
+    display: flex;
+  }
+
+  /* --- Main area --- */
+  .main {
+    padding-bottom: 60px;
+  }
+  /* Remove the two-column layout when right panel is open */
+  .main.with-right {
+    grid-template-columns: 1fr;
+  }
+  .main.with-right .topbar {
+    grid-column: 1;
+  }
+
+  /* --- Topbar --- */
+  .topbar {
+    padding: 0 16px;
+  }
+  .topbar h1 {
+    font-size: 17px;
+  }
+
+  /* --- Content --- */
+  .content {
+    padding: 16px 16px 32px 16px;
+  }
+
+  /* --- Grids --- */
+  .grid-cats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .cols-two {
+    grid-template-columns: 1fr;
+  }
+
+  /* --- Stat cards: compact on mobile --- */
+  .stat {
+    padding: 12px 14px;
+  }
+  .stat .v {
+    font-size: 24px;
+  }
+
+  /* --- Chart toggle --- */
+  .desktop-day-chart { display: none; }
+  .mobile-day-chart  { display: block; }
+
+  /* --- Roulette filter button: shown only on mobile --- */
+  .roulette-filter-btn { display: flex !important; }
+
+  /* --- Right panel: hidden on mobile unless .is-open --- */
+  .right-panel:not(.is-open) { display: none; }
+
+  /* --- Grid-3: stays 3 cols but compact --- */
+  .grid-3 { gap: 8px; }
+  .grid-3 .stat { padding: 10px 10px; }
+  .grid-3 .stat .v { font-size: 20px; }
+  .grid-3 .stat .l { font-size: 10px; margin-top: 3px; }
+
+  /* --- Roulette card --- */
+  .roulette { padding: 20px 20px 18px 20px; }
+  .roulette-title { font-size: 20px; }
+  .roulette-sub { font-size: 13px; }
+
+  /* --- Roulette actions: 3 equal buttons, no spacer --- */
+  .roulette-actions .spacer { display: none; }
+  .roulette-actions .btn { flex: 1; justify-content: center; }
+
+  /* --- Tasks page topbar: hide tabs and add-button --- */
+  .topbar-tabs { display: none; }
+  .topbar-add  { display: none; }
+
+  /* --- Mobile tab pills --- */
+  .mobile-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  /* --- Tasks toolbar: column on mobile --- */
+  .tasks-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .tasks-search-wrap {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+  }
+  /* Chips wrap на несколько строк, max-width не даёт вылезти за экран */
+  .tasks-chips-row {
+    flex-wrap: wrap;
+    max-width: 100%;
+    gap: 6px;
+  }
+  .tasks-chips-row .chip-group { flex-wrap: wrap; }
+  .tasks-divider { display: none; }
+
+  /* --- Task table: collapse to mobile card rows --- */
+  .tbl-head { display: none; }
+  .tbl-row {
+    grid-template-columns: 28px 3px 1fr auto;
+    column-gap: 10px;
+    padding: 13px 14px;
+  }
+  /* Hide desktop-only columns; grid auto-places remaining 4 children */
+  .tbl-row > div:nth-child(4),
+  .tbl-row > div:nth-child(5),
+  .tbl-row > div:nth-child(6) { display: none; }
+  /* Priority bar: full row height */
+  .tbl-bar { height: auto; align-self: stretch; }
+  /* Actions always visible */
+  .tbl-actions { opacity: 1 !important; }
+
+  /* --- Mobile meta row (priority + diff under title) --- */
+  .task-mobile-meta {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+    flex-wrap: wrap;
+  }
+  /* Compact badges inside meta row */
+  .task-mobile-meta .badge {
+    font-size: 10px;
+    height: 18px;
+    padding: 0 6px;
+    gap: 3px;
+  }
+  .task-mobile-meta .badge .dot {
+    width: 5px;
+    height: 5px;
+  }
+  /* Hide delete on mobile — saves ~32px for title cell */
+  .tbl-actions .task-action.danger { display: none; }
+
+  /* --- FAB --- */
+  .mobile-fab {
+    display: flex;
+    position: fixed;
+    bottom: 76px;
+    right: 16px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #07140d;
+    border: none;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(74, 186, 120, 0.35);
+    z-index: 30;
+    transition: transform 120ms, background 120ms;
+  }
+  .mobile-fab:active { transform: scale(0.93); background: var(--accent-pressed); }
+  .cat-card.add {
+    min-height: 140px;
+  }
+  .cat-card {
+    padding: 14px;
+    gap: 10px;
+  }
+  .cat-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+  }
+  .cat-name {
+    font-size: 14px;
+    margin: 6px 0 2px 0;
+  }
+
+  /* --- Right panel → bottom sheet on mobile --- */
+  .mobile-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: var(--overlay);
+    z-index: 45;
+    animation: fade 200ms ease-out;
+  }
+  .right-panel {
+    position: fixed;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+    top: auto;
+    border-left: none;
+    border-top: 1px solid var(--border-2);
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    max-height: 72vh;
+    z-index: 46;
+    animation: slideUp 300ms cubic-bezier(.2,.7,.2,1);
+    padding: 20px 20px 28px 20px;
+  }
+  .right-panel::before {
+    content: "";
+    display: block;
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border-3);
+    margin: 0 auto 18px auto;
+  }
+
+  /* ---- Modal: bottom sheet ---- */
+  .modal-backdrop {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+  }
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: 88vh;
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    animation: slideUp 300ms cubic-bezier(.2,.7,.2,1);
+  }
+  /* Drag handle */
+  .modal-head::before {
+    content: "";
+    display: block;
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border-3);
+    margin: 0 auto 14px auto;
+  }
+  .modal-head { padding-top: 16px; }
+
+  /* Form: single column */
+  .task-form-grid { grid-template-columns: 1fr; gap: 12px; }
+
+  /* Priority + Difficulty: horizontal 3-button row */
+  .priority-picker .radio-grid,
+  .difficulty-picker .radio-grid { display: flex; gap: 8px; }
+  .priority-picker .radio-card,
+  .difficulty-picker .radio-card {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px 6px;
+    gap: 6px;
+  }
+  .priority-picker .leader,
+  .difficulty-picker .leader { display: none; }
+  .priority-picker .rc-hint,
+  .difficulty-picker .rc-hint { display: none; }
+  .priority-picker .rc-title,
+  .difficulty-picker .rc-title { font-size: 12px; justify-content: center; }
+
+  /* Category: 2-column grid */
+  .category-picker-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    max-height: 180px;
+  }
+  .category-picker .rc-hint { display: none; }
+
+  /* Footer: stack vertically, save on top */
+  .modal-foot {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+  .modal-foot .spacer { display: none; }
+  .modal-foot .btn { width: 100%; justify-content: center; }
+
+  /* --- Toasts above bottom nav --- */
+  .toasts {
+    bottom: 72px;
+    left: 12px;
+    right: 12px;
+  }
+  .toast {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
