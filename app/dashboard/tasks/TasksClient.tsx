@@ -75,7 +75,7 @@ export function TasksClient({ initialTasks, categories }: TasksClientProps) {
           <h1>Задачи</h1>
           <span className="sub t-mono">{counts.all}</span>
         </div>
-        <div style={{ marginLeft: 18 }}>
+        <div className="topbar-tabs" style={{ marginLeft: 18 }}>
           <Tabs value={tab} onChange={setTab} items={[
             { value: 'all', label: 'Все', count: counts.all },
             { value: 'active', label: 'Активные', count: counts.active },
@@ -83,12 +83,23 @@ export function TasksClient({ initialTasks, categories }: TasksClientProps) {
           ]} />
         </div>
         <div className="spacer" />
-        <Button variant="primary" size="sm" icon="plus" onClick={() => setEditingTask('new')}>Добавить</Button>
+        <div className="topbar-add">
+          <Button variant="primary" size="sm" icon="plus" onClick={() => setEditingTask('new')}>Добавить</Button>
+        </div>
       </header>
 
       <main className="content content-narrow" style={{ maxWidth: 1200 }}>
-        <div className="fade-up" style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
-          <div className="input-wrap" style={{ minWidth: 280, maxWidth: 340 }}>
+        {/* Mobile tab pills — hidden on desktop */}
+        <div className="mobile-tabs">
+          {([['all', 'Все'], ['active', 'Активные'], ['done', 'Готовые']] as const).map(([v, l]) => (
+            <button key={v} className={`mobile-tab${tab === v ? ' active' : ''}`} onClick={() => setTab(v)}>
+              {l} <span>{counts[v]}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="tasks-toolbar fade-up">
+          <div className="input-wrap tasks-search-wrap">
             <span className="leading"><Icon name="search" size={14} /></span>
             <input
               className="input has-icon"
@@ -97,17 +108,19 @@ export function TasksClient({ initialTasks, categories }: TasksClientProps) {
               onChange={e => setSearch(e.target.value)}
             />
           </div>
-          <div className="chip-group">
-            {([['all','Все'],['HIGH','Срочно'],['MEDIUM','Средне'],['LOW','Низкий']] as const).map(([v,l]) => (
-              <Chip key={v} active={pri === v} onClick={() => setPri(v)}>{l}</Chip>
-            ))}
-          </div>
-          <div style={{ width: 1, height: 24, background: 'var(--border)' }} />
-          <div className="chip-group">
-            <Chip active={cat === 'all'} onClick={() => setCat('all')}>Все</Chip>
-            {categories.map(c => (
-              <Chip key={c.id} active={cat === c.id} dot dotColor={c.color} onClick={() => setCat(c.id)}>{c.name}</Chip>
-            ))}
+          <div className="tasks-chips-row">
+            <div className="chip-group">
+              {([['all','Все'],['HIGH','Срочно'],['MEDIUM','Средне'],['LOW','Низкий']] as const).map(([v,l]) => (
+                <Chip key={v} active={pri === v} onClick={() => setPri(v)}>{l}</Chip>
+              ))}
+            </div>
+            <div className="tasks-divider" />
+            <div className="chip-group">
+              <Chip active={cat === 'all'} onClick={() => setCat('all')}>Все</Chip>
+              {categories.map(c => (
+                <Chip key={c.id} active={cat === c.id} dot dotColor={c.color} onClick={() => setCat(c.id)}>{c.name}</Chip>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -142,6 +155,14 @@ export function TasksClient({ initialTasks, categories }: TasksClientProps) {
                 <div style={{ minWidth: 0 }}>
                   <div className="tbl-title">{t.title}</div>
                   {t.description && <div className="tbl-desc">{t.description}</div>}
+                  {/* Mobile: priority + difficulty shown inline under title */}
+                  <div className="task-mobile-meta">
+                    <PriorityBadge p={t.priority} />
+                    <Diff level={t.difficulty} />
+                    {t.category && (
+                      <span style={{ width: 7, height: 7, borderRadius: '50%', background: t.category.color, display: 'inline-block', flexShrink: 0 }} />
+                    )}
+                  </div>
                 </div>
                 <div><PriorityBadge p={t.priority} /></div>
                 <div>{t.category && <CategoryTag cat={t.category} />}</div>
@@ -155,6 +176,11 @@ export function TasksClient({ initialTasks, categories }: TasksClientProps) {
           </div>
         )}
       </main>
+
+      {/* Mobile FAB — hidden on desktop */}
+      <button className="mobile-fab" onClick={() => setEditingTask('new')} aria-label="Добавить задачу">
+        <Icon name="plus" size={22} />
+      </button>
 
       {editingTask !== null && (
         <TaskModal

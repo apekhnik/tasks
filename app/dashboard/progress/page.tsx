@@ -54,17 +54,34 @@ export default async function ProgressPage() {
               <span>Задачи по дням</span>
               <span className="count">всего {weekData.reduce((a, b) => a + b, 0)}</span>
             </div>
-            <div className="bars">
-              {weekData.map((v, i) => (
-                <div
-                  key={i}
-                  className={`bar${v > 0 ? ' has-data' : ''}${i === todayIdx ? ' today' : ''}`}
-                  data-tip={`${weekDays[i]} · ${v} задач`}
-                  style={{ height: `${(v / max) * 100}%` }}
-                />
-              ))}
+
+            <div className="desktop-day-chart">
+              <div className="bars">
+                {weekData.map((v, i) => (
+                  <div
+                    key={i}
+                    className={`bar${v > 0 ? ' has-data' : ''}${i === todayIdx ? ' today' : ''}`}
+                    data-tip={`${weekDays[i]} · ${v} задач`}
+                    style={{ height: `${(v / max) * 100}%` }}
+                  />
+                ))}
+              </div>
+              <div className="bars-axis">{weekDays.map(d => <span key={d}>{d}</span>)}</div>
             </div>
-            <div className="bars-axis">{weekDays.map(d => <span key={d}>{d}</span>)}</div>
+
+            <div className="mobile-day-chart">
+              <div className="day-bars">
+                {weekData.map((v, i) => (
+                  <div key={i} className={`day-bar-row${i === todayIdx ? ' is-today' : ''}`}>
+                    <span className="day-lbl">{weekDays[i]}</span>
+                    <div className="day-track">
+                      <div className="day-fill" style={{ width: `${(v / max) * 100}%` }} />
+                    </div>
+                    <span className="day-cnt">{v}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="card">

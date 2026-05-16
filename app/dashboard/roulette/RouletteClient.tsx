@@ -9,6 +9,7 @@ import { TaskModal } from '@/components/tasks/TaskModal'
 import { ConfirmDialog } from '@/components/tasks/ConfirmDialog'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { PriorityBadge, Diff } from '@/components/ui/Badge'
+import { Icon } from '@/components/ui/Icon'
 import { useToast } from '@/hooks/useToast'
 import { createTask, updateTask, deleteTask, completeTask } from '@/lib/actions/tasks'
 import { DURATIONS, DIFFICULTY_LABEL } from '@/lib/constants'
@@ -30,6 +31,7 @@ export function RouletteClient({ initialTasks, categories }: RouletteClientProps
   const [filters, setFilters] = useState<Filters>({ priority: 'all', category: 'all', difficulty: 'all' })
   const [spinning, setSpinning] = useState(false)
   const [flipKey, setFlipKey] = useState(0)
+  const [showFilters, setShowFilters] = useState(false)
   const [editingTask, setEditingTask] = useState<TaskWithCategory | null | 'new'>(null)
   const [confirmDel, setConfirmDel] = useState<TaskWithCategory | null>(null)
 
@@ -84,6 +86,9 @@ export function RouletteClient({ initialTasks, categories }: RouletteClientProps
           <span className="sub">{formatDate()}</span>
         </div>
         <div className="spacer" />
+        <span className="icon-btn roulette-filter-btn" title="Фильтры" onClick={() => setShowFilters(f => !f)}>
+          <Icon name="sliders" size={16} />
+        </span>
         <Button variant="ghost" size="sm" icon="plus" onClick={() => setEditingTask('new')}>Задача</Button>
         <Button variant="primary" size="sm" icon="dice" onClick={spin}>Крутить</Button>
       </header>
@@ -197,7 +202,9 @@ export function RouletteClient({ initialTasks, categories }: RouletteClientProps
         </div>
       </main>
 
-      <aside className="right-panel">
+      {showFilters && <div className="mobile-overlay" onClick={() => setShowFilters(false)} />}
+
+      <aside className={`right-panel${showFilters ? ' is-open' : ''}`}>
         <div>
           <div className="section-label"><span>Фильтр рулетки</span></div>
           <div className="t-caption text-3" style={{ marginBottom: 6 }}>Приоритет</div>

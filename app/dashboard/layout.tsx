@@ -6,6 +6,7 @@ import { Icon } from '@/components/ui/Icon'
 import { ToastProvider } from '@/components/providers/ToastProvider'
 import { SidebarNav } from '@/components/layout/SidebarNav'
 import { MainContainer } from '@/components/layout/MainContainer'
+import { BottomNav } from '@/components/layout/BottomNav'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const clerkUser = await ensureUser()
@@ -38,6 +39,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         </aside>
 
         <MainContainer>{children}</MainContainer>
+        <BottomNav />
       </div>
     </ToastProvider>
   )

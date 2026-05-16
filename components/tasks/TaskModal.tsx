@@ -89,8 +89,8 @@ export function TaskModal({ task, categories, onClose, onSave, onDelete }: TaskM
         />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
-        <div className="field">
+      <div className="task-form-grid">
+        <div className="field priority-picker">
           <label className="field-label">Приоритет</label>
           <div className="radio-grid">
             {([['HIGH','Срочно','В первую очередь','var(--red)'],['MEDIUM','Средне','При возможности','var(--amber)'],['LOW','Низкий','Когда будет время','var(--blue)']] as const).map(([v,t,h,c]) => (
@@ -99,7 +99,7 @@ export function TaskModal({ task, categories, onClose, onSave, onDelete }: TaskM
           </div>
         </div>
 
-        <div className="field">
+        <div className="field difficulty-picker">
           <label className="field-label">Сложность</label>
           <div className="radio-grid">
             {([['EASY','Лёгкая','до 15 минут'],['MEDIUM','Средняя','15–60 минут'],['HARD','Сложная','больше часа']] as const).map(([v,t,h]) => (
@@ -110,9 +110,9 @@ export function TaskModal({ task, categories, onClose, onSave, onDelete }: TaskM
           </div>
         </div>
 
-        <div className="field">
+        <div className="field category-picker">
           <label className="field-label">Категория</label>
-          <div className="radio-grid" style={{ maxHeight: 240, overflow: 'auto', paddingRight: 2 }}>
+          <div className="radio-grid category-picker-grid">
             {categories.map(c => (
               <RadioCard key={c.id} selected={categoryId === c.id} onClick={() => setCategoryId(c.id)}
                 title={c.name} dot={c.color} />
