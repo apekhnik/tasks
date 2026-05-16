@@ -1,10 +1,10 @@
 'use client'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Icon } from '@/components/ui/Icon'
+import { Icon, type IconName } from '@/components/ui/Icon'
 import type { Category } from '@/lib/db/schema'
 
-const NAV_ITEMS = [
+const NAV_ITEMS: { id: string; label: string; icon: IconName; href: string }[] = [
   { id: 'roulette',   label: 'Рулетка',   icon: 'dice',         href: '/dashboard/roulette' },
   { id: 'tasks',      label: 'Задачи',     icon: 'check-square', href: '/dashboard/tasks' },
   { id: 'categories', label: 'Категории',  icon: 'folder',       href: '/dashboard/categories' },
@@ -24,7 +24,7 @@ export function SidebarNav({ categories }: { categories: Category[] }) {
             className={`nav-item${pathname.startsWith(item.href) ? ' active' : ''}`}
             style={{ textDecoration: 'none' }}
           >
-            <Icon name={item.icon as any} size={16} />
+            <Icon name={item.icon} size={16} />
             <span className="nav-label">{item.label}</span>
           </Link>
         ))}

@@ -1,5 +1,5 @@
 'use client'
-import { Icon } from '@/components/ui/Icon'
+import { Icon, type IconName } from '@/components/ui/Icon'
 
 type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'text'
 type ButtonSize = 'sm' | 'md' | 'lg'
@@ -7,7 +7,7 @@ type ButtonSize = 'sm' | 'md' | 'lg'
 interface ButtonProps {
   variant?: ButtonVariant
   size?: ButtonSize
-  icon?: string
+  icon?: IconName
   children?: React.ReactNode
   onClick?: () => void
   disabled?: boolean
@@ -35,7 +35,7 @@ export function Button({
           <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
         </svg>
       ) : icon ? (
-        <Icon name={icon as any} size={14} />
+        <Icon name={icon} size={14} />
       ) : null}
       {children && <span>{children}</span>}
       {trailing}

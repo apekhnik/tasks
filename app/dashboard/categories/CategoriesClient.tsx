@@ -10,6 +10,7 @@ import { createTask } from '@/lib/actions/tasks'
 import type { TaskWithCategory } from '@/lib/types'
 import type { Category } from '@/lib/db/schema'
 import { DIFFICULTY_LABEL, DURATIONS } from '@/lib/constants'
+import type { IconName } from '@/components/ui/Icon'
 
 interface CategoriesClientProps {
   initialTasks: TaskWithCategory[]
@@ -59,7 +60,7 @@ export function CategoriesClient({ initialTasks, categories }: CategoriesClientP
               >
                 <div className="cat-card-head">
                   <div className="cat-icon" style={{ background: `${c.color}1a`, border: `1px solid ${c.color}40`, color: c.color }}>
-                    <Icon name={c.icon as any} size={18} />
+                    <Icon name={c.icon as IconName} size={18} />
                   </div>
                   {allDone ? (
                     <span className="badge badge-status-done"><Icon name="check" size={12} /> Готово</span>
@@ -107,7 +108,7 @@ export function CategoriesClient({ initialTasks, categories }: CategoriesClientP
           <aside className="right-panel" style={{ animation: 'slideInRight 300ms cubic-bezier(.2,.7,.2,1)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div className="cat-icon" style={{ background: `${selectedCat.color}1a`, border: `1px solid ${selectedCat.color}40`, color: selectedCat.color, width: 32, height: 32, borderRadius: 8 }}>
-                <Icon name={selectedCat.icon as any} size={16} />
+                <Icon name={selectedCat.icon as IconName} size={16} />
               </div>
               <div style={{ flex: 1 }}>
                 <div className="t-h3">{selectedCat.name}</div>
